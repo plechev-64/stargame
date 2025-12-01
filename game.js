@@ -1,0 +1,1 @@
+// This file is obsolete and has been replaced by the modular structure in the /js/ directory.

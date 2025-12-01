@@ -1,0 +1,95 @@
+**Project: "Космический шутер" (Space Shooter)**
+
+**1. General Description:**
+A 2D side-scrolling "shoot 'em up" browser game. The player controls a spaceship, fights waves of enemies, avoids obstacles, and collects power-ups. The goal is to score 100 points to trigger a final boss battle.
+
+**2. Core Mechanics & Features:**
+
+*   **Player & Controls:**
+    *   Movement: Arrow keys.
+    *   Shooting: Spacebar (hold for auto-fire).
+    *   **Ammo System:** The player has a limited but slowly regenerating ammo pool (Max: 50). Firing consumes ammo.
+    *   **Health System:** The player has a limited number of lives.
+
+*   **Weapon System (Player):**
+    *   **Default Weapon:** Standard single shots.
+    *   **Triple Shot:** Fires three projectiles in a spread pattern.
+    *   **Laser Beam:** An instant hit-scan weapon that pierces regular enemies but stops at the boss or obstacles.
+    *   **Homing Missiles:** Projectiles that track the nearest enemy.
+
+*   **Enemies & Boss:**
+    *   **Standard Enemies (`Angler1`):** Move in a sine wave pattern and fire back at the player.
+    *   **Progressive Difficulty:** The maximum number of on-screen enemies increases from 1 to 6 as the player's score grows.
+    *   **Boss:** Spawns at 100 points. It follows the player vertically and fires a three-shot burst. It has a dedicated health bar.
+
+*   **Power-Up System:**
+    *   Enemies have a 30% chance to drop a random power-up upon destruction.
+    *   Power-ups slowly move towards the player's position.
+    *   **Power-Up Types:**
+        *   `Heart`: Restores one life.
+        *   `Damage Boost`: Triples player damage for 5 seconds.
+        *   `Nuke`: Destroys all on-screen enemies and adds their score.
+        *   `Weapon Bonus`: Grants a random advanced weapon (Triple, Laser, Homing) for 10 seconds.
+        *   `Ammo Bonus`: Instantly refills player's ammo to maximum.
+
+*   **Environment & Obstacles:**
+    *   **Asteroids:** Indestructible circular obstacles that move across the screen. They block projectiles and damage the player on collision.
+    *   **Starfield Background:** A dynamic background with stars moving at high speed to create a sense of flight. The stars stop moving during the boss battle.
+
+*   **Visual & Audio Effects:**
+    *   Player and enemy ships are drawn using composite geometric shapes.
+    *   A red screen flash indicates when the player takes damage.
+    *   A white screen flash occurs when the Nuke power-up is used.
+    *   **Full Audio Integration:**
+        *   Background music (`theme.mp3`) plays on a loop.
+        *   Unique sound effects for different weapon types (`bulletStart2.mp3`, `cannonShoot.mp3`).
+        *   Sounds for taking damage (`fail.mp3`), collecting a power-up (`goal.mp3`), and game over (`gameOver.mp3`).
+
+**3. Code Structure:**
+The entire game logic is encapsulated in `game.js` using an object-oriented approach with classes for each game entity (`Game`, `Player`, `Enemy`, `Boss`, `Projectile`, `PowerUp`, `Obstacle`, `UI`, `InputHandler`, `Background`).
+
+**4. Project File Structure:**
+```
+/videgame
+|-- index.html        # Entry point, contains canvas and audio tags
+|-- style.css         # Styles for the canvas and page
+|-- game.js           # All game logic
+|-- .context          # This project description file
+|-- /assets
+|   |-- .gitkeep
+|   |-- /sounds
+|       |-- bulletStart.mp3
+|       |-- bulletStart2.mp3
+|       |-- cannonShoot.mp3
+|       |-- fail.mp3
+|       |-- gameOver.mp3
+|       |-- goal.mp3
+|       |-- theme.mp3
+```
+
+---
+
+### **Последние изменения (на русском языке):**
+
+*   **Исправление бага с лазером:** Логика урона от лазерного луча была переработана. Теперь урон наносится корректно всем врагам на линии огня в момент выстрела.
+*   **Рефакторинг и модульная структура:**
+    *   Основной файл `game.js` был разделен на 8 логических модулей, находящихся в новой директории `js/`.
+    *   Проект переведен на использование ES6 модулей (`import`/`export`) для лучшей организации и поддержки кода.
+    *   `index.html` обновлен для загрузки основного скрипта `js/main.js` как модуля.
+*   **Улучшение поведения врагов:** Враги теперь не вылетают за пределы экрана, а отскакивают от верхней и нижней границ, оставаясь в поле зрения игрока.
+*   **Баланс бонусов:**
+    *   Время действия бонуса на оружие увеличено до 20 секунд.
+    *   Время действия бонуса на урон увеличено до 10 секунд.
+*   **Улучшение звука:**
+    *   Фоновая музыка теперь корректно останавливается при проигрыше.
+    *   Звук выстрела игрока изменен на `bulletStart2.mp3` для всех типов оружия.
+*   **Запуск через веб-сервер:** В связи с переходом на модули, для корректной работы игры (во избежание ошибок CORS) ее необходимо запускать через локальный веб-сервер (например, встроенный в IDE).
+*   **Новый бонус "Щит":** Добавлен бонус, дающий игроку 10 секунд неуязвимости. Во время действия щита корабль окружен мигающей сферой.
+*   **Изменение баланса боезапаса:**
+    *   Максимальный боезапас уменьшен до 25, а начальный — до 10.
+    *   Скорость восстановления боезапаса уменьшена вдвое.
+    *   Бонус "Ammo" теперь временно удваивает максимальный боезапас и полностью его восстанавливает.
+*   **Динамическая система выпадения бонусов:**
+    *   Внедрена система "весов" и "таймера жалости".
+    *   Чем дольше не выпадают бонусы, тем выше шанс их появления.
+    *   После выпадения конкретного бонуса, его "вес" (шанс выпадения) временно снижается, а веса остальных — увеличиваются. Это делает распределение бонусов более сбалансированным.
